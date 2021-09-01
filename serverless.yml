@@ -1,0 +1,51 @@
+service: simple-neg-pos
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: 20201221
+  stage: dev
+  region: ap-northeast-1
+  environment:
+    SAGEMAKER_ENDPOINT: negpos
+plugins:
+  - serverless-python-requirements
+  - serverless-iam-roles-per-function
+
+package:
+  individually: true
+  patterns:
+    - '!**'
+
+functions:
+  index:
+    handler: index.index
+    events:
+      - http:
+          method: get
+          path: negpos
+          integration: lambda
+          response:
+            headers:
+              Content-Type: "'text/html'"
+            template: ${file(index.html)}
+    package:
+      individually: true
+      patterns:
+        - index.py
+        - index.html
+  pred:
+    handler: pred.pred
+    events:
+      - http:
+          method: post
+          path: negpos
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - sagemaker:*
+        Resource: arn:aws:sagemaker:${self:provider.region}:*:*
+    package:
+      individually: true
+      patterns:
+        - pred.py

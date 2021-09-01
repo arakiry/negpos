@@ -1,0 +1,4 @@
+.serverless
+.npmignore
+node_modules
+package*

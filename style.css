@@ -1,0 +1,22 @@
+div {
+    text-align: center;
+}
+
+textarea {
+    width: 60vw;
+    height: 30vh;
+    resize: none;
+    font-size: 1.5em;
+}
+
+input {
+    font-size: 1.5em;
+}
+
+#result {
+    font-size: 3em;
+}
+
+.result_head {
+    margin-top: 5vh;
+}

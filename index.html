@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style type="text/css">
+        <!--
+            div {
+                text-align: center;
+            }
+            textarea {
+                width: 60vw;
+                height: 30vh;
+                resize: none;
+                font-size: 1.5em;
+            }
+            input {
+                font-size: 1.5em;
+            }
+            #label, #score {
+                font-size: 3em;
+            }
+            .result_head {
+                margin-top: 5vh;
+            }
+        -->
+        </style>
+        <meta charset="UTF-8">
+        <script language="javascript" type="text/javascript">
+            function OnButtonClick() {
+                query = document.getElementById("query").value;
+                const url = location.href ;
+                console.debug(url);
+                const data = { query: query };
+                console.debug(data);
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.debug(data);
+                    const label_prefix = "結果："
+                    const score_prefix = "確率："
+                    const score_postfix = "%"
+                    document.getElementById("label").innerText = label_prefix + data.label;
+                    document.getElementById("score").innerText = score_prefix + data.score + score_postfix;
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    text = "リクエストに失敗しました"
+                    document.getElementById("label").innerText = text;
+                    document.getElementById("score").innerText = "";
+                    console.error('Error:', error);
+                });
+            }
+        </script>
+        <!--
+        <link rel="stylesheet" href="style.css">
+        -->
+        <title>ネガポジ判定</title>
+    </head>
+    <body>
+        <div><h1>ネガポジ判定</h1></div>
+        <div><textarea id="query" type="search" placeholder="テキストを入力"></textarea><br></div>
+        <div><input type="submit" value="判定" onclick="OnButtonClick();"></div>
+        <div id="label" class="result_head"><p></p></div>
+        <div id="score"><p></p></div>
+    </body>
+</html>
